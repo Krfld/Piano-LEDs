@@ -55,7 +55,7 @@ void loop()
 		if (pixels[i] != 0)
 			pixels[i] *= 0.95;
 	leds.show();
-	delay(20);
+	delay(25);
 }
 
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity, uint16_t timestamp)
