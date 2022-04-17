@@ -30,20 +30,48 @@ void setup()
 {
 	log_i("Setup");
 
+	leds.begin();
+	leds.clear();
+	leds.setBrightness(255);
+	leds.show();
+
 	BLEMidiServer.begin("ESP32");
 	BLEMidiServer.setOnConnectCallback([]()
-									   { log_i("Connected"); });
+									   { log_i("Connected");
+
+										leds.fill(LEDS_ON);
+										leds.show();
+									   	delay(100);
+										leds.clear();
+										leds.show();
+									   	delay(100);
+
+										leds.fill(LEDS_ON);
+										leds.show();
+									   	delay(100);
+										leds.clear();
+										leds.show();
+									   	delay(100);
+
+										leds.fill(LEDS_ON);
+										leds.show();
+									   	delay(100);
+										leds.clear();
+										leds.show();
+									   	delay(100);
+
+										leds.fill(LEDS_ON);
+										leds.show();
+									   	delay(100);
+										leds.clear();
+										leds.show();
+									   	delay(100); });
 	BLEMidiServer.setOnDisconnectCallback([]()
 										  { log_i("Disconnected"); });
 	BLEMidiServer.setNoteOnCallback(onNoteOn);
 	BLEMidiServer.setNoteOffCallback(onNoteOff);
 	BLEMidiServer.setControlChangeCallback(onControlChange);
 	// BLEMidiServer.enableDebugging();
-
-	leds.begin();
-	leds.clear();
-	leds.setBrightness(255);
-	leds.show();
 
 	log_i("Ready");
 }
@@ -73,6 +101,8 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity, uint16_t timestam
 		return;
 	}
 
+	uint8_t n = note - LOWEST_NOTE - (SHIFT ? 1 : 0);
+	uint8_t intensity = velocity * 2;
 	switch (note % 12)
 	{
 	case 0:
@@ -82,7 +112,7 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity, uint16_t timestam
 	case 7:
 	case 9:
 	case 11:
-		leds.setPixelColor(note - LOWEST_NOTE - (SHIFT ? 1 : 0), leds.Color(0, velocity * 2, velocity * 2));
+		leds.setPixelColor(n, leds.Color(0, intensity, intensity));
 		break;
 
 	case 1:
@@ -90,7 +120,7 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity, uint16_t timestam
 	case 6:
 	case 8:
 	case 10:
-		leds.setPixelColor(note - LOWEST_NOTE - (SHIFT ? 1 : 0), leds.Color(velocity * 2, 0, velocity * 2));
+		leds.setPixelColor(n, leds.Color(intensity, 0, intensity));
 		break;
 
 	default:
