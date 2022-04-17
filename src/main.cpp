@@ -73,7 +73,6 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity, uint16_t timestam
 		return;
 	}
 
-	uint32_t color = WHITE_KEYS;
 	switch (note % 12)
 	{
 	case 0:
@@ -83,7 +82,7 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity, uint16_t timestam
 	case 7:
 	case 9:
 	case 11:
-		color = WHITE_KEYS;
+		leds.setPixelColor(note - LOWEST_NOTE - (SHIFT ? 1 : 0), leds.Color(0, velocity * 2, velocity * 2));
 		break;
 
 	case 1:
@@ -91,14 +90,13 @@ void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity, uint16_t timestam
 	case 6:
 	case 8:
 	case 10:
-		color = BLACK_KEYS;
+		leds.setPixelColor(note - LOWEST_NOTE - (SHIFT ? 1 : 0), leds.Color(velocity * 2, 0, velocity * 2));
 		break;
 
 	default:
 		break;
 	}
 
-	leds.setPixelColor(note - LOWEST_NOTE - (SHIFT ? 1 : 0), color);
 	leds.show();
 }
 
