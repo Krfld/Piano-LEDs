@@ -20,6 +20,8 @@ Adafruit_NeoPixel leds(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 #define LEDS_ON leds.Color(255, 255, 255)
 #define LEDS_OFF leds.Color(0, 0, 0)
 
+void onConnected();
+void onDisconnected();
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity, uint16_t timestamp);
 void onNoteOff(uint8_t channel, uint8_t note, uint8_t velocity, uint16_t timestamp);
 void onControlChange(uint8_t channel, uint8_t controller, uint8_t value, uint16_t timestamp);
@@ -36,38 +38,8 @@ void setup()
 	leds.show();
 
 	BLEMidiServer.begin("ESP32");
-	BLEMidiServer.setOnConnectCallback([]()
-									   { log_i("Connected");
-
-										leds.fill(LEDS_ON);
-										leds.show();
-									   	delay(100);
-										leds.clear();
-										leds.show();
-									   	delay(100);
-
-										leds.fill(LEDS_ON);
-										leds.show();
-									   	delay(100);
-										leds.clear();
-										leds.show();
-									   	delay(100);
-
-										leds.fill(LEDS_ON);
-										leds.show();
-									   	delay(100);
-										leds.clear();
-										leds.show();
-									   	delay(100);
-
-										leds.fill(LEDS_ON);
-										leds.show();
-									   	delay(100);
-										leds.clear();
-										leds.show();
-									   	delay(100); });
-	BLEMidiServer.setOnDisconnectCallback([]()
-										  { log_i("Disconnected"); });
+	BLEMidiServer.setOnConnectCallback(onConnected);
+	BLEMidiServer.setOnDisconnectCallback(onDisconnected);
 	BLEMidiServer.setNoteOnCallback(onNoteOn);
 	BLEMidiServer.setNoteOffCallback(onNoteOff);
 	BLEMidiServer.setControlChangeCallback(onControlChange);
@@ -84,6 +56,44 @@ void loop()
 			pixels[i] *= 0.95;
 	leds.show();
 	delay(25);
+}
+
+void onConnected()
+{
+	log_i("Connected");
+
+	leds.fill(LEDS_ON);
+	leds.show();
+	delay(100);
+	leds.clear();
+	leds.show();
+	delay(100);
+
+	leds.fill(LEDS_ON);
+	leds.show();
+	delay(100);
+	leds.clear();
+	leds.show();
+	delay(100);
+
+	leds.fill(LEDS_ON);
+	leds.show();
+	delay(100);
+	leds.clear();
+	leds.show();
+	delay(100);
+
+	leds.fill(LEDS_ON);
+	leds.show();
+	delay(100);
+	leds.clear();
+	leds.show();
+	delay(100);
+}
+
+void onDisconnected()
+{
+	log_i("Disconnected");
 }
 
 void onNoteOn(uint8_t channel, uint8_t note, uint8_t velocity, uint16_t timestamp)
